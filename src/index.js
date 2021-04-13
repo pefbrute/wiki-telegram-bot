@@ -2,7 +2,6 @@ const fs = require("fs");
 const { Telegraf } = require("telegraf");
 const dotenv = require("dotenv").config();
 const wiki = require("wikijs").default;
-// import wiki from 'wikijs';
 
 const commandsFolder = "./commands/";
 const commandsCollection = {};
@@ -17,6 +16,7 @@ let interfaceObject = {};
 let fileName = "";
 let wordName = "";
 let wordChoice = "";
+let apiURL = "";
 
 fs.readdir(commandsFolder, (err, files) => {
   files.forEach((file) => {
@@ -87,13 +87,15 @@ bot.action("CN", (ctx) => {
 
 bot.on("message", async (msg) => {
   if (answerCounter === 1) {
+    if (languageCode === "ru") {
+      apiURL = "https://ru.wikipedia.org/w/api.php";
+    } else {
+      apiURL = "https://en.wikipedia.org/w/api.php";
+    }
+
     try {
       wordName = msg.update.message.text;
-    //   wordName = await commandsCollection["translation"](wordName);
-
-    //   msg.reply(wordName);
-
-      wiki()
+      wiki({ apiUrl: apiURL })
         .page(wordName)
         .then((page) => page.summary())
         .then((info) => msg.reply(info));
