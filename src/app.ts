@@ -35,11 +35,11 @@ bot.command("start", (ctx) => {
   try {
     interfaceObject = commandsCollection["interface"](languageCode);
 
-    inlineLanguageButton = interfaceObject.inlineLanguageButton;
-    inlineMessage = interfaceObject.inlineMessage;
-    inlineButton = interfaceObject.inlineButton;
-    inlineLanguageMessage = interfaceObject.inlineLanguageMessage;
-    wordChoice = interfaceObject.wordChoice;
+    inlineLanguageButton = interfaceObject["inlineLanguageButton"];
+    inlineMessage = interfaceObject["inlineMessage"];
+    inlineButton = interfaceObject["inlineButton"];
+    inlineLanguageMessage = interfaceObject["inlineLanguageMessage"];
+    wordChoice = interfaceObject["wordChoice"];
 
     ctx.reply(inlineMessage, inlineButton);
   } catch {
@@ -56,11 +56,11 @@ bot.action("ru", (ctx) => {
 
   interfaceObject = commandsCollection["interface"](languageCode);
 
-  inlineLanguageButton = interfaceObject.inlineLanguageButton;
-  inlineMessage = interfaceObject.inlineMessage;
-  inlineButton = interfaceObject.inlineButton;
-  inlineLanguageMessage = interfaceObject.inlineLanguageMessage;
-  wordChoice = interfaceObject.wordChoice;
+  inlineLanguageButton = interfaceObject["inlineLanguageButton"];
+    inlineMessage = interfaceObject["inlineMessage"];
+    inlineButton = interfaceObject["inlineButton"];
+    inlineLanguageMessage = interfaceObject["inlineLanguageMessage"];
+    wordChoice = interfaceObject["wordChoice"];
 
   ctx.reply(inlineMessage, inlineButton);
 });
@@ -69,11 +69,11 @@ bot.action("en", (ctx) => {
   languageCode = "en";
   interfaceObject = commandsCollection["interface"](languageCode);
 
-  inlineLanguageButton = interfaceObject.inlineLanguageButton;
-  inlineMessage = interfaceObject.inlineMessage;
-  inlineButton = interfaceObject.inlineButton;
-  inlineLanguageMessage = interfaceObject.inlineLanguageMessage;
-  wordChoice = interfaceObject.wordChoice;
+  inlineLanguageButton = interfaceObject["inlineLanguageButton"];
+    inlineMessage = interfaceObject["inlineMessage"];
+    inlineButton = interfaceObject["inlineButton"];
+    inlineLanguageMessage = interfaceObject["inlineLanguageMessage"];
+    wordChoice = interfaceObject["wordChoice"];
 
   ctx.reply(inlineMessage, inlineButton);
 });
