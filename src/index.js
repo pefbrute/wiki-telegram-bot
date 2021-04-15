@@ -52,6 +52,7 @@ var fileName = "";
 var wordName = "";
 var wordChoice = "";
 var apiURL = "";
+var errorCheck = 0;
 fs.readdir(commandsFolder, function (err, files) {
     files.forEach(function (file) {
         fileName = file.substring(0, file.length - 3);
@@ -76,6 +77,16 @@ bot.command("start", function (ctx) {
     catch (_a) {
         console.log("Something is wrong");
     }
+});
+bot.command("word", function (ctx) { return __awaiter(_this, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        ctx.reply(wordChoice);
+        answerCounter = 1;
+        return [2 /*return*/];
+    });
+}); });
+bot.command("language", function (ctx) {
+    ctx.reply(inlineLanguageMessage, inlineLanguageButton);
 });
 bot.action("Language", function (ctx) {
     ctx.reply(inlineLanguageMessage, inlineLanguageButton);
@@ -118,11 +129,15 @@ bot.on("message", function (msg) { return __awaiter(_this, void 0, void 0, funct
                     .then(function (page) { return page.summary(); })
                     .then(function (info) { return msg.reply(info); });
                 setTimeout(function () {
-                    msg.reply(inlineMessage, inlineButton);
-                }, 1000);
+                    if (errorCheck === 0) {
+                        msg.reply(inlineMessage, inlineButton);
+                    }
+                }, 1800);
                 answerCounter = 0;
+                errorCheck = 0;
             }
             catch (_b) {
+                answerCounter = 1;
                 console.log("Something is wrong");
             }
         }
@@ -134,5 +149,8 @@ process.on("uncaughtException", function (err) {
     console.log(err);
 });
 process.on("unhandledRejection", function (err) {
+    answerCounter = 1;
+    errorCheck = 1;
     console.log(err);
+    console.log("Something is super puper wrong!");
 });

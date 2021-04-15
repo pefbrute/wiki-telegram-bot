@@ -16,6 +16,7 @@ let fileName: string = "";
 let wordName: string = "";
 let wordChoice: string = "";
 let apiURL: string = "";
+let errorCheck: number = 0;
 
 fs.readdir(commandsFolder, (err, files) => {
   files.forEach((file) => {
@@ -46,6 +47,16 @@ bot.command("start", (ctx) => {
   } catch {
     console.log("Something is wrong");
   }
+});
+
+bot.command("word", async (ctx) => {
+  ctx.reply(wordChoice);
+
+  answerCounter = 1;
+});
+
+bot.command("language", (ctx) => {
+  ctx.reply(inlineLanguageMessage, inlineLanguageButton);
 });
 
 bot.action("Language", (ctx) => {
@@ -100,10 +111,14 @@ bot.on("message", async (msg) => {
         .then((info) => msg.reply(info));
 
       setTimeout(() => {
-        msg.reply(inlineMessage, inlineButton);
-      }, 1000);
+        if (errorCheck === 0){
+          msg.reply(inlineMessage, inlineButton);
+        }
+      }, 1800);
       answerCounter = 0;
+      errorCheck = 0;
     } catch {
+      answerCounter = 1;
       console.log("Something is wrong");
     }
   }
@@ -116,5 +131,8 @@ process.on("uncaughtException", (err) => {
 });
 
 process.on("unhandledRejection", (err) => {
+  answerCounter = 1;
+  errorCheck = 1;
   console.log(err);
+  console.log("Something is super puper wrong!");
 });
