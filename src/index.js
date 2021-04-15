@@ -53,6 +53,7 @@ var wordName = "";
 var wordChoice = "";
 var apiURL = "";
 var errorCheck = 0;
+var errorMessage = "";
 fs.readdir(commandsFolder, function (err, files) {
     files.forEach(function (file) {
         fileName = file.substring(0, file.length - 3);
@@ -72,6 +73,7 @@ bot.command("start", function (ctx) {
         inlineButton = interfaceObject["inlineButton"];
         inlineLanguageMessage = interfaceObject["inlineLanguageMessage"];
         wordChoice = interfaceObject["wordChoice"];
+        errorMessage = interfaceObject["errorMessage"];
         ctx.reply(inlineMessage, inlineButton);
     }
     catch (_a) {
@@ -99,6 +101,7 @@ bot.action("ru", function (ctx) {
     inlineButton = interfaceObject["inlineButton"];
     inlineLanguageMessage = interfaceObject["inlineLanguageMessage"];
     wordChoice = interfaceObject["wordChoice"];
+    errorMessage = interfaceObject["errorMessage"];
     ctx.reply(inlineMessage, inlineButton);
 });
 bot.action("en", function (ctx) {
@@ -109,6 +112,7 @@ bot.action("en", function (ctx) {
     inlineButton = interfaceObject["inlineButton"];
     inlineLanguageMessage = interfaceObject["inlineLanguageMessage"];
     wordChoice = interfaceObject["wordChoice"];
+    errorMessage = interfaceObject["errorMessage"];
     ctx.reply(inlineMessage, inlineButton);
 });
 bot.action("CN", function (ctx) {
@@ -131,6 +135,9 @@ bot.on("message", function (msg) { return __awaiter(_this, void 0, void 0, funct
                 setTimeout(function () {
                     if (errorCheck === 0) {
                         msg.reply(inlineMessage, inlineButton);
+                    }
+                    else {
+                        msg.reply(errorMessage);
                     }
                 }, 1800);
                 answerCounter = 0;

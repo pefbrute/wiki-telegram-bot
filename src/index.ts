@@ -17,6 +17,7 @@ let wordName: string = "";
 let wordChoice: string = "";
 let apiURL: string = "";
 let errorCheck: number = 0;
+let errorMessage: string = "";
 
 fs.readdir(commandsFolder, (err, files) => {
   files.forEach((file) => {
@@ -42,6 +43,7 @@ bot.command("start", (ctx) => {
     inlineButton = interfaceObject["inlineButton"];
     inlineLanguageMessage = interfaceObject["inlineLanguageMessage"];
     wordChoice = interfaceObject["wordChoice"];
+    errorMessage = interfaceObject["errorMessage"];
 
     ctx.reply(inlineMessage, inlineButton);
   } catch {
@@ -73,6 +75,7 @@ bot.action("ru", (ctx) => {
   inlineButton = interfaceObject["inlineButton"];
   inlineLanguageMessage = interfaceObject["inlineLanguageMessage"];
   wordChoice = interfaceObject["wordChoice"];
+  errorMessage = interfaceObject["errorMessage"];
 
   ctx.reply(inlineMessage, inlineButton);
 });
@@ -86,6 +89,7 @@ bot.action("en", (ctx) => {
   inlineButton = interfaceObject["inlineButton"];
   inlineLanguageMessage = interfaceObject["inlineLanguageMessage"];
   wordChoice = interfaceObject["wordChoice"];
+  errorMessage = interfaceObject["errorMessage"];
 
   ctx.reply(inlineMessage, inlineButton);
 });
@@ -113,6 +117,8 @@ bot.on("message", async (msg) => {
       setTimeout(() => {
         if (errorCheck === 0){
           msg.reply(inlineMessage, inlineButton);
+        } else {
+          msg.reply(errorMessage)
         }
       }, 1800);
       answerCounter = 0;
