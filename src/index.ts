@@ -3,19 +3,19 @@ const { Telegraf } = require("telegraf");
 const dotenv = require("dotenv").config();
 const wiki = require("wikijs").default;
 
-const commandsFolder = "./commands/";
-const commandsCollection = {};
-let inlineLanguageMessage = "";
-let inlineMessage = "";
-let languageCode = "en";
-let answerCounter = 0;
-let inlineButton = {};
-let inlineLanguageButton = {};
-let interfaceObject = {};
-let fileName = "";
-let wordName = "";
-let wordChoice = "";
-let apiURL = "";
+const commandsFolder: string = "./commands/";
+const commandsCollection: object = {};
+let inlineLanguageMessage: string = "";
+let inlineMessage: string = "";
+let languageCode: string = "en";
+let answerCounter: number = 0;
+let inlineButton: object = {};
+let inlineLanguageButton: object = {};
+let interfaceObject: object = {};
+let fileName: string = "";
+let wordName: string = "";
+let wordChoice: string = "";
+let apiURL: string = "";
 
 fs.readdir(commandsFolder, (err, files) => {
   files.forEach((file) => {
@@ -25,6 +25,7 @@ fs.readdir(commandsFolder, (err, files) => {
 });
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
+
 bot.command("start", (ctx) => {
   languageCode = ctx.message.from.language_code;
 
@@ -57,10 +58,10 @@ bot.action("ru", (ctx) => {
   interfaceObject = commandsCollection["interface"](languageCode);
 
   inlineLanguageButton = interfaceObject["inlineLanguageButton"];
-    inlineMessage = interfaceObject["inlineMessage"];
-    inlineButton = interfaceObject["inlineButton"];
-    inlineLanguageMessage = interfaceObject["inlineLanguageMessage"];
-    wordChoice = interfaceObject["wordChoice"];
+  inlineMessage = interfaceObject["inlineMessage"];
+  inlineButton = interfaceObject["inlineButton"];
+  inlineLanguageMessage = interfaceObject["inlineLanguageMessage"];
+  wordChoice = interfaceObject["wordChoice"];
 
   ctx.reply(inlineMessage, inlineButton);
 });
@@ -70,10 +71,10 @@ bot.action("en", (ctx) => {
   interfaceObject = commandsCollection["interface"](languageCode);
 
   inlineLanguageButton = interfaceObject["inlineLanguageButton"];
-    inlineMessage = interfaceObject["inlineMessage"];
-    inlineButton = interfaceObject["inlineButton"];
-    inlineLanguageMessage = interfaceObject["inlineLanguageMessage"];
-    wordChoice = interfaceObject["wordChoice"];
+  inlineMessage = interfaceObject["inlineMessage"];
+  inlineButton = interfaceObject["inlineButton"];
+  inlineLanguageMessage = interfaceObject["inlineLanguageMessage"];
+  wordChoice = interfaceObject["wordChoice"];
 
   ctx.reply(inlineMessage, inlineButton);
 });
