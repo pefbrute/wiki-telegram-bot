@@ -54,12 +54,23 @@ var wordChoice = "";
 var apiURL = "";
 var errorCheck = 0;
 var errorMessage = "";
+var errorAdvice = "";
 fs.readdir(commandsFolder, function (err, files) {
     files.forEach(function (file) {
         fileName = file.substring(0, file.length - 3);
         commandsCollection[fileName] = require("." + commandsFolder + fileName);
     });
 });
+function initInterface() {
+    interfaceObject = commandsCollection["interface"](languageCode);
+    inlineLanguageButton = interfaceObject["inlineLanguageButton"];
+    inlineMessage = interfaceObject["inlineMessage"];
+    inlineButton = interfaceObject["inlineButton"];
+    inlineLanguageMessage = interfaceObject["inlineLanguageMessage"];
+    wordChoice = interfaceObject["wordChoice"];
+    errorMessage = interfaceObject["errorMessage"];
+    errorAdvice = interfaceObject["errorAdvice"];
+}
 var bot = new Telegraf(process.env.BOT_TOKEN);
 bot.command("start", function (ctx) {
     languageCode = ctx.message.from.language_code;
@@ -67,13 +78,7 @@ bot.command("start", function (ctx) {
         languageCode = "ru";
     }
     try {
-        interfaceObject = commandsCollection["interface"](languageCode);
-        inlineLanguageButton = interfaceObject["inlineLanguageButton"];
-        inlineMessage = interfaceObject["inlineMessage"];
-        inlineButton = interfaceObject["inlineButton"];
-        inlineLanguageMessage = interfaceObject["inlineLanguageMessage"];
-        wordChoice = interfaceObject["wordChoice"];
-        errorMessage = interfaceObject["errorMessage"];
+        initInterface();
         ctx.reply(inlineMessage, inlineButton);
     }
     catch (_a) {
@@ -95,24 +100,12 @@ bot.action("Language", function (ctx) {
 });
 bot.action("ru", function (ctx) {
     languageCode = "ru";
-    interfaceObject = commandsCollection["interface"](languageCode);
-    inlineLanguageButton = interfaceObject["inlineLanguageButton"];
-    inlineMessage = interfaceObject["inlineMessage"];
-    inlineButton = interfaceObject["inlineButton"];
-    inlineLanguageMessage = interfaceObject["inlineLanguageMessage"];
-    wordChoice = interfaceObject["wordChoice"];
-    errorMessage = interfaceObject["errorMessage"];
+    initInterface();
     ctx.reply(inlineMessage, inlineButton);
 });
 bot.action("en", function (ctx) {
     languageCode = "en";
-    interfaceObject = commandsCollection["interface"](languageCode);
-    inlineLanguageButton = interfaceObject["inlineLanguageButton"];
-    inlineMessage = interfaceObject["inlineMessage"];
-    inlineButton = interfaceObject["inlineButton"];
-    inlineLanguageMessage = interfaceObject["inlineLanguageMessage"];
-    wordChoice = interfaceObject["wordChoice"];
-    errorMessage = interfaceObject["errorMessage"];
+    initInterface();
     ctx.reply(inlineMessage, inlineButton);
 });
 bot.action("CN", function (ctx) {
@@ -138,8 +131,9 @@ bot.on("message", function (msg) { return __awaiter(_this, void 0, void 0, funct
                     }
                     else {
                         msg.reply(errorMessage);
+                        msg.reply(errorAdvice);
                     }
-                }, 1800);
+                }, 2500);
                 answerCounter = 0;
                 errorCheck = 0;
             }

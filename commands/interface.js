@@ -32,7 +32,8 @@ module.exports = function init(languageCode) {
   
           inlineLanguageMessage: "Выберите язык",
           wordChoice: "Введите название термина",
-          errorMessage: "Статья не найдена"
+          errorMessage: "Статья не найдена",
+          errorAdvice: "Введите другой термин"
         };
   
       case "en":
@@ -64,7 +65,8 @@ module.exports = function init(languageCode) {
   
           inlineLanguageMessage: "Select language",
           wordChoice: "Enter a word",
-          errorMessage: "The article is not found"
+          errorMessage: "The article is not found",
+          errorAdvice: "Enter another word"
         };
     }
   };

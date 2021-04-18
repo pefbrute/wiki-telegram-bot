@@ -3,21 +3,22 @@ const { Telegraf } = require("telegraf");
 const dotenv = require("dotenv").config();
 const wiki = require("wikijs").default;
 
-const commandsFolder: string = "./commands/";
 const commandsCollection: object = {};
+let inlineLanguageButton: object = {};
+let interfaceObject: object = {};
+let inlineButton: object = {};
+let errorCheck: number = 0;
+let answerCounter: number = 0;
+const commandsFolder: string = "./commands/";
 let inlineLanguageMessage: string = "";
 let inlineMessage: string = "";
 let languageCode: string = "en";
-let answerCounter: number = 0;
-let inlineButton: object = {};
-let inlineLanguageButton: object = {};
-let interfaceObject: object = {};
 let fileName: string = "";
 let wordName: string = "";
 let wordChoice: string = "";
 let apiURL: string = "";
-let errorCheck: number = 0;
 let errorMessage: string = "";
+let errorAdvice: string = "";
 
 fs.readdir(commandsFolder, (err, files) => {
   files.forEach((file) => {
@@ -25,6 +26,18 @@ fs.readdir(commandsFolder, (err, files) => {
     commandsCollection[fileName] = require("." + commandsFolder + fileName);
   });
 });
+
+function initInterface() {
+  interfaceObject = commandsCollection["interface"](languageCode);
+
+  inlineLanguageButton = interfaceObject["inlineLanguageButton"];
+  inlineMessage = interfaceObject["inlineMessage"];
+  inlineButton = interfaceObject["inlineButton"];
+  inlineLanguageMessage = interfaceObject["inlineLanguageMessage"];
+  wordChoice = interfaceObject["wordChoice"];
+  errorMessage = interfaceObject["errorMessage"];
+  errorAdvice = interfaceObject["errorAdvice"];
+}
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
@@ -36,15 +49,7 @@ bot.command("start", (ctx) => {
   }
 
   try {
-    interfaceObject = commandsCollection["interface"](languageCode);
-
-    inlineLanguageButton = interfaceObject["inlineLanguageButton"];
-    inlineMessage = interfaceObject["inlineMessage"];
-    inlineButton = interfaceObject["inlineButton"];
-    inlineLanguageMessage = interfaceObject["inlineLanguageMessage"];
-    wordChoice = interfaceObject["wordChoice"];
-    errorMessage = interfaceObject["errorMessage"];
-
+    initInterface();
     ctx.reply(inlineMessage, inlineButton);
   } catch {
     console.log("Something is wrong");
@@ -68,28 +73,14 @@ bot.action("Language", (ctx) => {
 bot.action("ru", (ctx) => {
   languageCode = "ru";
 
-  interfaceObject = commandsCollection["interface"](languageCode);
-
-  inlineLanguageButton = interfaceObject["inlineLanguageButton"];
-  inlineMessage = interfaceObject["inlineMessage"];
-  inlineButton = interfaceObject["inlineButton"];
-  inlineLanguageMessage = interfaceObject["inlineLanguageMessage"];
-  wordChoice = interfaceObject["wordChoice"];
-  errorMessage = interfaceObject["errorMessage"];
+  initInterface();
 
   ctx.reply(inlineMessage, inlineButton);
 });
 
 bot.action("en", (ctx) => {
   languageCode = "en";
-  interfaceObject = commandsCollection["interface"](languageCode);
-
-  inlineLanguageButton = interfaceObject["inlineLanguageButton"];
-  inlineMessage = interfaceObject["inlineMessage"];
-  inlineButton = interfaceObject["inlineButton"];
-  inlineLanguageMessage = interfaceObject["inlineLanguageMessage"];
-  wordChoice = interfaceObject["wordChoice"];
-  errorMessage = interfaceObject["errorMessage"];
+  initInterface();
 
   ctx.reply(inlineMessage, inlineButton);
 });
@@ -115,12 +106,13 @@ bot.on("message", async (msg) => {
         .then((info) => msg.reply(info));
 
       setTimeout(() => {
-        if (errorCheck === 0){
+        if (errorCheck === 0) {
           msg.reply(inlineMessage, inlineButton);
         } else {
-          msg.reply(errorMessage)
+          msg.reply(errorMessage);
+          msg.reply(errorAdvice);
         }
-      }, 1800);
+      }, 2500);
       answerCounter = 0;
       errorCheck = 0;
     } catch {
