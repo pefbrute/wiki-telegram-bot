@@ -19,6 +19,7 @@ let wordChoice: string = "";
 let apiURL: string = "";
 let errorMessage: string = "";
 let errorAdvice: string = "";
+let languageChange: string = "";
 
 fs.readdir(commandsFolder, (err, files) => {
   files.forEach((file) => {
@@ -26,7 +27,7 @@ fs.readdir(commandsFolder, (err, files) => {
     commandsCollection[fileName] = require("." + commandsFolder + fileName);
   });
 
-  console.log(err);
+  throw new Error(err);
 });
 
 function initInterface(): void {
@@ -39,6 +40,7 @@ function initInterface(): void {
   wordChoice = interfaceObject["wordChoice"];
   errorMessage = interfaceObject["errorMessage"];
   errorAdvice = interfaceObject["errorAdvice"];
+  languageChange = interfaceObject["languageChange"];
 }
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
@@ -53,8 +55,8 @@ bot.command("start", (ctx) => {
   try {
     initInterface();
     ctx.reply(inlineMessage, inlineButton);
-  } catch {
-  throw new Error("Something is not working!");
+  } catch (err) {
+  throw new Error(err);
   }
 });
 
@@ -67,6 +69,20 @@ bot.command("word", async (ctx) => {
 bot.command("language", (ctx) => {
   ctx.reply(inlineLanguageMessage, inlineLanguageButton);
 });
+
+bot.command("ru", (ctx) => {
+  languageCode = "ru";
+  initInterface();
+  ctx.reply(languageChange);
+  ctx.reply(inlineMessage, inlineButton);
+})
+
+bot.command("en", (ctx) => {
+  languageCode = "en";
+  initInterface();
+  ctx.reply(languageChange);
+  ctx.reply(inlineMessage, inlineButton);
+})
 
 bot.action("Language", (ctx) => {
   ctx.reply(inlineLanguageMessage, inlineLanguageButton);
@@ -117,9 +133,9 @@ bot.on("message", async (msg) => {
       }, 2500);
       answerCounter = 0;
       errorCheck = 0;
-    } catch {
+    } catch (err) {
       answerCounter = 1;
-      throw new Error("Something is not working!");
+      throw new Error(err);
     }
   }
 });
