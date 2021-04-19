@@ -4,12 +4,12 @@ const dotenv = require("dotenv").config();
 const wiki = require("wikijs").default;
 
 const commandsCollection: object = {};
+const  commandsFolder: string = "./commands/";
 let inlineLanguageButton: object = {};
 let interfaceObject: object = {};
 let inlineButton: object = {};
 let errorCheck: number = 0;
 let answerCounter: number = 0;
-const commandsFolder: string = "./commands/";
 let inlineLanguageMessage: string = "";
 let inlineMessage: string = "";
 let languageCode: string = "en";
@@ -25,9 +25,11 @@ fs.readdir(commandsFolder, (err, files) => {
     fileName = file.substring(0, file.length - 3);
     commandsCollection[fileName] = require("." + commandsFolder + fileName);
   });
+
+  console.log(err);
 });
 
-function initInterface() {
+function initInterface(): void {
   interfaceObject = commandsCollection["interface"](languageCode);
 
   inlineLanguageButton = interfaceObject["inlineLanguageButton"];
@@ -52,7 +54,7 @@ bot.command("start", (ctx) => {
     initInterface();
     ctx.reply(inlineMessage, inlineButton);
   } catch {
-    console.log("Something is wrong");
+  throw new Error("Something is not working!");
   }
 });
 
@@ -117,7 +119,7 @@ bot.on("message", async (msg) => {
       errorCheck = 0;
     } catch {
       answerCounter = 1;
-      console.log("Something is wrong");
+      throw new Error("Something is not working!");
     }
   }
 });
@@ -132,5 +134,5 @@ process.on("unhandledRejection", (err) => {
   answerCounter = 1;
   errorCheck = 1;
   console.log(err);
-  console.log("Something is super puper wrong!");
+  throw new Error("Something is not working!");
 });
