@@ -3,6 +3,8 @@ const { Telegraf } = require("telegraf");
 const dotenv = require("dotenv").config();
 const wiki = require("wikijs").default;
 
+// Variables section
+
 const commandsCollection: object = {};
 const  commandsFolder: string = "./commands/";
 let inlineLanguageButton: object = {};
@@ -21,6 +23,10 @@ let errorMessage: string = "";
 let errorAdvice: string = "";
 let languageChange: string = "";
 
+//
+
+
+// Require components from commands folder
 fs.readdir(commandsFolder, (err, files) => {
   files.forEach((file) => {
     fileName = file.substring(0, file.length - 3);
@@ -30,6 +36,9 @@ fs.readdir(commandsFolder, (err, files) => {
   throw new Error(err);
 });
 
+
+// It changes interface of the telegram bot
+// in relation with language code
 function initInterface(): void {
   interfaceObject = commandsCollection["interface"](languageCode);
 
@@ -43,8 +52,11 @@ function initInterface(): void {
   languageChange = interfaceObject["languageChange"];
 }
 
+
+// Bot instance
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
+//Sets language code then interface when /start command is invoked
 bot.command("start", (ctx) => {
   languageCode = ctx.message.from.language_code;
 
@@ -60,16 +72,21 @@ bot.command("start", (ctx) => {
   }
 });
 
+// When user wants to check some word it prints the wordChoice message
+// And sets answerCounter to accept the word and find the definition
 bot.command("word", async (ctx) => {
   ctx.reply(wordChoice);
 
   answerCounter = 1;
 });
 
+// When /language command is invoked
+// It replies with button for selecting one of the languages
 bot.command("language", (ctx) => {
   ctx.reply(inlineLanguageMessage, inlineLanguageButton);
 });
 
+// When /ru command is invoked it changes interface in Russian
 bot.command("ru", (ctx) => {
   languageCode = "ru";
   initInterface();
@@ -77,6 +94,7 @@ bot.command("ru", (ctx) => {
   ctx.reply(inlineMessage, inlineButton);
 })
 
+// When /en command is invoked it changes interface in English
 bot.command("en", (ctx) => {
   languageCode = "en";
   initInterface();
@@ -84,10 +102,13 @@ bot.command("en", (ctx) => {
   ctx.reply(inlineMessage, inlineButton);
 })
 
+// When action language is used 
+//it replies with button for selecting one of the languages
 bot.action("Language", (ctx) => {
   ctx.reply(inlineLanguageMessage, inlineLanguageButton);
 });
 
+// When ru action is invoked it changes interface in Russian
 bot.action("ru", (ctx) => {
   languageCode = "ru";
 
@@ -96,6 +117,7 @@ bot.action("ru", (ctx) => {
   ctx.reply(inlineMessage, inlineButton);
 });
 
+// When en action is invoked it changes interface in English
 bot.action("en", (ctx) => {
   languageCode = "en";
   initInterface();
@@ -103,12 +125,15 @@ bot.action("en", (ctx) => {
   ctx.reply(inlineMessage, inlineButton);
 });
 
+// When CN action is invoked it prints the wordChoice message
+// And sets answerCounter to accept the word and find the definition
 bot.action("CN", (ctx) => {
   ctx.reply(wordChoice);
 
   answerCounter = 1;
 });
 
+// When user typed some message it finds its definition
 bot.on("message", async (msg) => {
   if (answerCounter === 1) {
     apiURL =
@@ -141,6 +166,7 @@ bot.on("message", async (msg) => {
 });
 
 bot.launch();
+
 
 process.on("uncaughtException", (err) => {
   console.log(err);

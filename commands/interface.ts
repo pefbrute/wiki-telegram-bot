@@ -1,5 +1,6 @@
 module.exports = function init(languageCode: string): object {
     switch (languageCode) {
+      // Sets the interface to Russian
       case "ru":
         return {
           inlineLanguageButton: {
@@ -36,7 +37,8 @@ module.exports = function init(languageCode: string): object {
           errorAdvice: "Введите другой термин",
           languageChange: "Язык сменён на русский"
         };
-  
+
+      // Sets the interface to English
       case "en":
         return {
           inlineLanguageButton: {
