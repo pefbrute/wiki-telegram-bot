@@ -68,7 +68,7 @@ bot.command("start", (ctx) => {
     initInterface();
     ctx.reply(inlineMessage, inlineButton);
   } catch (err) {
-  throw new Error(err);
+    throw new Error(err);
   }
 });
 
